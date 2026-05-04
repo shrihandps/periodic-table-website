@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Periodic Table</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Periodic Table of Elements</h1>
+            <p>Click on any element to learn more</p>
+        </header>
+
+        <div class="controls">
+            <input type="text" id="searchBox" placeholder="Search by name, symbol, or atomic number..." class="search-box">
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><span class="legend-color nonmetal"></span> Nonmetal</div>
+            <div class="legend-item"><span class="legend-color noble-gas"></span> Noble Gas</div>
+            <div class="legend-item"><span class="legend-color alkali-metal"></span> Alkali Metal</div>
+            <div class="legend-item"><span class="legend-color alkaline-earth"></span> Alkaline Earth</div>
+            <div class="legend-item"><span class="legend-color transition-metal"></span> Transition Metal</div>
+            <div class="legend-item"><span class="legend-color lanthanide"></span> Lanthanide</div>
+            <div class="legend-item"><span class="legend-color actinide"></span> Actinide</div>
+            <div class="legend-item"><span class="legend-color metalloid"></span> Metalloid</div>
+            <div class="legend-item"><span class="legend-color halogen"></span> Halogen</div>
+        </div>
+
+        <div class="periodic-table" id="periodicTable"></div>
+    </div>
+
+    <!-- Modal for element details -->
+    <div id="elementModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
