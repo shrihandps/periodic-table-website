@@ -244,8 +244,10 @@ function startQuiz() {
     currentQuestions = shuffle(quizQuestions).slice(0, 10);
     userAnswers = new Array(currentQuestions.length).fill(null);
     
-    // Hide start button, show submit and reset buttons
+    // Hide start button, show submit, close and reset buttons
+    document.getElementById('start-btn').style.display = 'none';
     document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('close-btn').style.display = 'inline-block';
     document.querySelector('.tab-button:nth-child(2)').closest('.tab-navigation').querySelector('.tab-button:nth-child(1)').style.opacity = '0.5';
     document.querySelector('.tab-button:nth-child(2)').closest('.tab-navigation').querySelector('.tab-button:nth-child(1)').style.pointerEvents = 'none';
     
@@ -340,6 +342,21 @@ function showScore(score) {
     
     document.getElementById('submit-btn').style.display = 'none';
     document.getElementById('reset-btn').style.display = 'inline-block';
+}
+
+function closeQuiz() {
+    quizActive = false;
+    clearInterval(quizTimer);
+    
+    document.getElementById('quiz-score').style.display = 'none';
+    document.getElementById('quiz-content').innerHTML = '';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('close-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'none';
+    document.getElementById('start-btn').style.display = 'inline-block';
+    document.querySelector('.tab-button:first-child').style.opacity = '1';
+    document.querySelector('.tab-button:first-child').style.pointerEvents = 'auto';
+    document.getElementById('quiz-timer').textContent = '⏳ Time left: 2:00';
 }
 
 function resetQuiz() {
