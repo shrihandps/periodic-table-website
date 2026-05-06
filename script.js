@@ -121,6 +121,56 @@ const elements = [
 
 let allElements = [...elements];
 
+// Quiz Questions
+const quizQuestions = [
+    { q: "What is the atomic number of Hydrogen?", options: ["1", "2", "3", "4"], answer: "1" },
+    { q: "Which element has the symbol 'He'?", options: ["Helium", "Hydrogen", "Hafnium", "Holmium"], answer: "Helium" },
+    { q: "Lithium belongs to which group?", options: ["Alkali metals", "Halogens", "Noble gases", "Transition metals"], answer: "Alkali metals" },
+    { q: "What is the atomic number of Beryllium?", options: ["2", "3", "4", "5"], answer: "4" },
+    { q: "Which element has the symbol 'B'?", options: ["Boron", "Barium", "Bismuth", "Berkelium"], answer: "Boron" },
+    { q: "Carbon has how many valence electrons?", options: ["2", "4", "6", "8"], answer: "4" },
+    { q: "Which element has the symbol 'N'?", options: ["Nitrogen", "Neon", "Nickel", "Niobium"], answer: "Nitrogen" },
+    { q: "What is the atomic number of Oxygen?", options: ["6", "7", "8", "9"], answer: "8" },
+    { q: "Which element has the symbol 'F'?", options: ["Fluorine", "Francium", "Fermium", "Iron"], answer: "Fluorine" },
+    { q: "Neon belongs to which group?", options: ["Noble gases", "Halogens", "Alkali metals", "Lanthanides"], answer: "Noble gases" },
+    { q: "What is the atomic number of Sodium?", options: ["9", "10", "11", "12"], answer: "11" },
+    { q: "Which element has the symbol 'Mg'?", options: ["Magnesium", "Manganese", "Mercury", "Meitnerium"], answer: "Magnesium" },
+    { q: "Aluminium is classified as?", options: ["Metal", "Non-metal", "Metalloid", "Noble gas"], answer: "Metal" },
+    { q: "What is the atomic number of Silicon?", options: ["12", "13", "14", "15"], answer: "14" },
+    { q: "Which element has the symbol 'P'?", options: ["Phosphorus", "Platinum", "Polonium", "Protactinium"], answer: "Phosphorus" },
+    { q: "Sulfur is commonly used in?", options: ["Gunpowder", "Glass making", "Fertilizers", "All of these"], answer: "All of these" },
+    { q: "What is the atomic number of Chlorine?", options: ["15", "16", "17", "18"], answer: "17" },
+    { q: "Which element has the symbol 'Ar'?", options: ["Argon", "Arsenic", "Actinium", "Americium"], answer: "Argon" },
+    { q: "Potassium belongs to which group?", options: ["Alkali metals", "Halogens", "Noble gases", "Transition metals"], answer: "Alkali metals" },
+    { q: "What is the atomic number of Calcium?", options: ["18", "19", "20", "21"], answer: "20" }
+];
+
+let currentQuestions = [];
+let userAnswers = [];
+let quizTimer;
+let timeLeft = 120;
+let quizActive = false;
+
+// Tab Switching
+function switchTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+}
+
+// Periodic Table Functions
 function renderTable() {
     const table = document.getElementById('periodicTable');
     table.innerHTML = '';
@@ -178,7 +228,137 @@ function searchElements(query) {
     renderTable();
 }
 
-// Event listeners
+// Quiz Functions
+function shuffle(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+function startQuiz() {
+    quizActive = true;
+    timeLeft = 120;
+    currentQuestions = shuffle(quizQuestions).slice(0, 10);
+    userAnswers = new Array(currentQuestions.length).fill(null);
+    
+    // Hide start button, show submit and reset buttons
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.querySelector('.tab-button:nth-child(2)').closest('.tab-navigation').querySelector('.tab-button:nth-child(1)').style.opacity = '0.5';
+    document.querySelector('.tab-button:nth-child(2)').closest('.tab-navigation').querySelector('.tab-button:nth-child(1)').style.pointerEvents = 'none';
+    
+    renderQuiz();
+    startTimer();
+}
+
+function renderQuiz() {
+    const quizContent = document.getElementById('quiz-content');
+    quizContent.innerHTML = '';
+
+    currentQuestions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'quiz-question';
+        
+        const questionText = document.createElement('p');
+        questionText.textContent = `Q${index + 1}: ${question.q}`;
+        questionDiv.appendChild(questionText);
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'quiz-options';
+
+        question.options.forEach((option, optIndex) => {
+            const optionLabel = document.createElement('label');
+            optionLabel.className = 'quiz-option';
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `q${index}`;
+            radio.value = option;
+            radio.addEventListener('change', () => {
+                userAnswers[index] = option;
+            });
+
+            optionLabel.appendChild(radio);
+            optionLabel.appendChild(document.createTextNode(option));
+            optionsDiv.appendChild(optionLabel);
+        });
+
+        questionDiv.appendChild(optionsDiv);
+        quizContent.appendChild(questionDiv);
+    });
+}
+
+function startTimer() {
+    const timerDisplay = document.getElementById('quiz-timer');
+    
+    quizTimer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `⏳ Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        timeLeft--;
+        if (timeLeft < 0) {
+            clearInterval(quizTimer);
+            submitQuiz();
+        }
+    }, 1000);
+}
+
+function submitQuiz() {
+    quizActive = false;
+    clearInterval(quizTimer);
+    
+    let score = 0;
+    currentQuestions.forEach((question, index) => {
+        if (userAnswers[index] === question.answer) {
+            score++;
+        }
+    });
+
+    showScore(score);
+}
+
+function showScore(score) {
+    const scoreDiv = document.getElementById('quiz-score');
+    const percentage = Math.round((score / currentQuestions.length) * 100);
+    let message = '';
+    
+    if (percentage === 100) message = '🌟 Perfect Score!';
+    else if (percentage >= 80) message = '🎉 Excellent!';
+    else if (percentage >= 60) message = '👍 Good Job!';
+    else if (percentage >= 40) message = '📚 Keep Learning!';
+    else message = '💪 Try Again!';
+
+    scoreDiv.innerHTML = `
+        <div class="score-value">${score}/${currentQuestions.length}</div>
+        <div>${percentage}%</div>
+        <div class="score-message">${message}</div>
+    `;
+    scoreDiv.style.display = 'block';
+    
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'inline-block';
+}
+
+function resetQuiz() {
+    quizActive = false;
+    clearInterval(quizTimer);
+    
+    document.getElementById('quiz-score').style.display = 'none';
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'none';
+    document.querySelector('.tab-button:first-child').style.opacity = '1';
+    document.querySelector('.tab-button:first-child').style.pointerEvents = 'auto';
+    
+    document.getElementById('quiz-content').innerHTML = '';
+    document.getElementById('quiz-timer').textContent = '⏳ Time left: 2:00';
+    
+    startQuiz();
+}
+
+// Event listeners for Periodic Table
 document.getElementById('searchBox').addEventListener('input', (e) => {
     searchElements(e.target.value);
 });
