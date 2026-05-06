@@ -516,6 +516,16 @@ header p {
     box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
 }
 
+.close-btn {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+}
+
+.close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
+}
+
 /* Responsive Design */
 
 /* Large screens (1200px and up) */
@@ -998,58 +1008,5 @@ header p {
 
     .periodic-table {
         gap: 3px;
-    }
-
-    .element {
-        min-height: 40px;
-        padding: 1px;
-    }
-
-    .element-symbol {
-        font-size: 0.8em;
-    }
-
-    .tab-button {
-        padding: 6px 10px;
-        font-size: 0.7em;
-    }
-}
-
-/* Touch devices optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .element {
-        padding: 8px;
-    }
-
-    .element:hover {
-        transform: none;
-    }
-
-    .element:active {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
-
-    .search-box {
-        font-size: 16px;
-    }
-
-    .tab-button:hover {
-        transform: none;
-    }
-
-    .quiz-option:hover {
-        background-color: white;
-    }
-
-    .quiz-option:active {
-        background-color: #f5f5f5;
-        border-color: #667eea;
-    }
-}
-
-/* High DPI screens */
-@media (min-device-pixel-ratio: 2) {
-    .element {
-        border-width: 1px;
     }
 }
